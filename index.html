@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akadonye Chibuike Macdonald — AI Generalist</title>
+  <meta name="description" content="AI Generalist. One-person army. I turn AI into leverage from Owerri, Nigeria." />
+  <meta name="theme-color" content="#06080a" />
+  <style>
+    :root {
+      --bg: #06080a;
+      --bg2: #0a0e12;
+      --fg: #e8eeef;
+      --muted: #8a9a9c;
+      --glow: #2dd4bf;
+      --dim: rgba(45,212,191,0.13);
+      --card: #0f1418;
+      --border: rgba(255,255,255,0.07);
+      --danger: #f87171;
+      --gut: clamp(18px, 4.5vw, 42px);
+      --max: 1000px;
+      --f: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--f);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gut); }
+
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px var(--gut);
+      background: linear-gradient(to bottom, rgba(6,8,10,0.96), transparent);
+      backdrop-filter: blur(12px);
+      transition: background .25s, border-color .25s;
+      border-bottom: 1px solid transparent;
+    }
+    .nav.scrolled { background: rgba(6,8,10,0.94); border-bottom-color: var(--border); }
+    .nav-brand { font-weight: 700; font-size: 14px; letter-spacing: -.02em; }
+    .nav-brand span { color: var(--glow); }
+    .nav-links { display: none; gap: 22px; font-size: 13px; color: var(--muted); }
+    @media (min-width: 760px) { .nav-links { display: flex; } }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-cta {
+      background: var(--glow); color: #04201f; font-weight: 600; font-size: 13px;
+      padding: 8px 15px; border-radius: 999px; transition: transform .15s;
+    }
+    .nav-cta:hover { transform: scale(1.04); }
+
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 110px 0 70px;
+      background:
+        radial-gradient(120% 80% at 85% -5%, #0f3a3b 0%, transparent 55%),
+        radial-gradient(60% 50% at 8% 90%, rgba(45,212,191,0.05) 0%, transparent 50%),
+        var(--bg);
+    }
+    .hero-kicker {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--glow); margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 6.8vw, 3.6rem); font-weight: 800;
+      letter-spacing: -.035em; line-height: 1.06; margin-bottom: 16px;
+    }
+    .hero h1 em { font-style: normal; color: var(--glow); }
+    .hero-lead {
+      font-size: 1.05rem; color: var(--muted); max-width: 500px; margin-bottom: 24px;
+    }
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 10px 18px; font-size: 13px;
+      color: var(--muted); margin-bottom: 28px;
+    }
+    .hero-meta span::before {
+      content: ""; display: inline-block; width: 5px; height: 5px;
+      border-radius: 50%; background: var(--glow); margin-right: 7px; vertical-align: middle;
+    }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600; padding: 11px 18px; border-radius: 999px;
+      transition: all .15s; border: none; cursor: pointer;
+    }
+    .btn-primary { background: var(--glow); color: #04201f; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(45,212,191,.28); }
+    .btn-ghost {
+      border: 1px solid var(--border); color: var(--fg);
+      background: rgba(255,255,255,.03);
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
+
+    .stage {
+      position: relative;
+      max-width: 420px;
+      margin: 0 0 8px;
+      aspect-ratio: 16/10;
+      background: linear-gradient(160deg, #0c1418 0%, #0a1014 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.45);
+    }
+    .stage-screen {
+      position: absolute; inset: 12px 12px 28px;
+      background: #071012;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .stage-bar {
+      height: 22px; background: #0e161a; display: flex; align-items: center;
+      gap: 5px; padding: 0 10px; font-size: 10px; color: var(--muted);
+    }
+    .stage-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .stage-dot.r { background: #f87171; }
+    .stage-dot.y { background: #fbbf24; }
+    .stage-dot.g { background: #34d399; }
+    .stage-body {
+      flex: 1; padding: 14px 16px; font-family: var(--mono); font-size: 11.5px;
+      line-height: 1.55; color: var(--muted); overflow: hidden;
+    }
+    .stage-line { opacity: 0; transform: translateY(6px); transition: all .4s ease; }
+    .stage-line.show { opacity: 1; transform: none; }
+    .stage-line .g { color: var(--glow); }
+    .stage-line .w { color: var(--fg); }
+    .stage-base {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 22px;
+      background: linear-gradient(to top, #0a1014, #0c1418);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: .08em;
+    }
+    .stage-hint {
+      font-family: var(--mono); font-size: 11px; color: var(--muted);
+      margin-top: 10px; max-width: 420px;
+    }
+    .stage-hint kbd {
+      font-family: var(--mono); font-size: 10px; padding: 2px 6px;
+      border: 1px solid var(--border); border-radius: 4px; background: var(--card);
+    }
+
+    .console-wrap {
+      margin-top: 28px; max-width: 520px;
+      background: #0a0e12; border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; font-family: var(--mono); font-size: 13px;
+    }
+    .console-bar {
+      display: flex; align-items: center; gap: 7px; padding: 7px 14px;
+      background: #11161c; border-bottom: 1px solid var(--border); font-size: 11px; color: var(--muted);
+    }
+    .console-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .console-body { padding: 14px 16px; min-height: 110px; }
+    .console-prompt { color: var(--glow); }
+    .console-input {
+      background: transparent; border: none; outline: none; color: var(--fg);
+      font-family: var(--mono); font-size: 13px; width: 72%; caret-color: var(--glow);
+    }
+    .console-hint { margin-top: 10px; font-size: 11px; color: var(--muted); }
+    .console-out { color: var(--muted); white-space: pre-wrap; margin-top: 8px; max-height: 160px; overflow-y: auto; }
+
+    section { padding: 76px 0; border-top: 1px solid var(--border); }
+    .sec-label {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+    }
+    .sec-title {
+      font-size: clamp(1.5rem, 3.6vw, 2.1rem); font-weight: 800;
+      letter-spacing: -.03em; line-height: 1.15; margin-bottom: 12px;
+    }
+    .sec-title em { font-style: normal; color: var(--glow); }
+    .sec-lead { color: var(--muted); max-width: 500px; margin-bottom: 32px; font-size: .98rem; }
+
+    .work-grid { display: grid; gap: 14px; }
+    @media (min-width: 700px) { .work-grid { grid-template-columns: 1fr 1fr; } }
+    .work-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 22px; transition: border-color .2s, transform .2s;
+    }
+    .work-card:hover { border-color: rgba(45,212,191,.28); transform: translateY(-2px); }
+    .work-num { font-family: var(--mono); font-size: 11px; color: var(--glow); margin-bottom: 8px; }
+    .work-card h3 { font-size: 1.08rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: 6px; }
+    .work-card p { color: var(--muted); font-size: .92rem; margin-bottom: 12px; }
+    .metric {
+      display: inline-flex; align-items: baseline; gap: 6px;
+      font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--fg);
+      margin-bottom: 10px;
+    }
+    .metric span { font-size: 12px; font-weight: 500; color: var(--muted); }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-size: 11px; font-family: var(--mono); padding: 3px 9px;
+      border-radius: 999px; background: var(--dim); color: var(--glow);
+    }
+    .work-stat {
+      margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border);
+      font-size: 12.5px; color: var(--muted);
+    }
+    .work-stat strong { color: var(--fg); }
+
+    .skills-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+    @media (min-width: 560px) { .skills-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 820px) { .skills-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .skill-bucket {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; transition: border-color .2s;
+    }
+    .skill-bucket:hover { border-color: rgba(45,212,191,.25); }
+    .skill-bucket h4 { font-size: 13px; font-weight: 700; color: var(--glow); margin-bottom: 8px; }
+    .skill-bucket ul { list-style: none; font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    .timeline { position: relative; padding-left: 24px; }
+    .timeline::before {
+      content: ""; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 2px;
+      background: linear-gradient(to bottom, var(--glow), transparent);
+    }
+    .tl-item { position: relative; margin-bottom: 26px; }
+    .tl-item:last-child { margin-bottom: 0; }
+    .tl-item::before {
+      content: ""; position: absolute; left: -22px; top: 5px;
+      width: 11px; height: 11px; border-radius: 50%;
+      background: var(--bg); border: 2px solid var(--glow);
+    }
+    .tl-year { font-family: var(--mono); font-size: 11px; color: var(--glow); margin-bottom: 3px; }
+    .tl-item h3 { font-size: 1rem; font-weight: 700; margin-bottom: 3px; }
+    .tl-item p { color: var(--muted); font-size: .92rem; max-width: 480px; }
+
+    .now-box {
+      background: linear-gradient(135deg, rgba(45,212,191,.08), transparent 60%), var(--card);
+      border: 1px solid rgba(45,212,191,.22); border-radius: 16px; padding: 28px;
+    }
+    .now-box h3 { font-size: 1.18rem; font-weight: 700; margin-bottom: 10px; }
+    .now-box p { color: var(--muted); font-size: .96rem; max-width: 500px; margin-bottom: 14px; }
+
+    .play-grid { display: grid; gap: 14px; }
+    @media (min-width: 640px) { .play-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .play-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px; cursor: pointer; transition: border-color .2s, transform .2s;
+    }
+    .play-card:hover { border-color: rgba(45,212,191,.3); transform: translateY(-2px); }
+    .play-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .play-card p { color: var(--muted); font-size: .87rem; margin-bottom: 12px; }
+    .play-card .open { font-family: var(--mono); font-size: 12px; color: var(--glow); }
+
+    .modal {
+      position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.8);
+      display: none; align-items: center; justify-content: center; padding: 18px;
+    }
+    .modal.open { display: flex; }
+    .modal-box {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+      max-width: 540px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 26px;
+    }
+    .modal-box h3 { font-size: 1.18rem; margin-bottom: 8px; }
+    .modal-box p { color: var(--muted); font-size: .94rem; margin-bottom: 14px; }
+    .modal-close {
+      float: right; background: none; border: none; color: var(--muted);
+      font-size: 22px; cursor: pointer; line-height: 1;
+    }
+    .modal-close:hover { color: var(--fg); }
+    .score-bar {
+      height: 6px; background: #1a2228; border-radius: 3px; overflow: hidden; margin: 10px 0;
+    }
+    .score-fill { height: 100%; background: var(--glow); width: 0%; transition: width .4s; }
+
+    .contact-grid { display: grid; gap: 14px; }
+    @media (min-width: 560px) { .contact-grid { grid-template-columns: 1fr 1fr; } }
+    .contact-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px;
+    }
+    .contact-card h3 { font-size: 1.02rem; font-weight: 700; margin-bottom: 6px; }
+    .contact-card p { color: var(--muted); font-size: .92rem; margin-bottom: 12px; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; }
+    .contact-links a { color: var(--glow); border-bottom: 1px solid transparent; }
+    .contact-links a:hover { border-color: var(--glow); }
+
+    footer {
+      padding: 28px 0 48px; border-top: 1px solid var(--border);
+      font-size: 12.5px; color: var(--muted);
+    }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+    .nojs-note {
+      font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+      margin-bottom: 18px; padding: 8px 12px; background: rgba(255,255,255,.03);
+      border-radius: 8px; border: 1px solid var(--border);
+    }
+    .js-only { display: none; }
+    html.js .js-only { display: block; }
+    html.js .nojs-only { display: none; }
+  </style>
+</head>
+<body>
+  <script>document.documentElement.classList.add('js');</script>
+
+  <nav class="nav" id="nav">
+    <a href="#top" class="nav-brand">Akadonye <span>M</span></a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#skills">Skills</a>
+      <a href="#play">Play</a>
+      <a href="#now">Now</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="nav-cta">Get in touch</a>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="wrap">
+      <p class="nojs-note nojs-only">This portfolio works without JavaScript. Turn JS on for the live stage, console and games.</p>
+      <p class="nojs-note js-only">Interactive mode. Watch the stage, use the console, or open the games under Play.</p>
+
+      <p class="hero-kicker">AI Generalist · Owerri</p>
+      <h1>Akadonye<br><em>Chibuike Macdonald</em></h1>
+      <p class="hero-lead">
+        I turn AI into leverage — building, automating, creating and connecting so one person can ship what used to need a team.
+      </p>
+      <div class="hero-meta">
+        <span>One-person army</span>
+        <span>Commercial AI video systems</span>
+        <span>Owerri, Nigeria</span>
+      </div>
+      <div class="btn-row">
+        <a href="#work" class="btn btn-primary">See what I’ve shipped</a>
+        <a href="#play" class="btn btn-ghost">Try the games</a>
+      </div>
+
+      <div class="stage js-only" id="stage" aria-hidden="true">
+        <div class="stage-screen">
+          <div class="stage-bar">
+            <span class="stage-dot r"></span>
+            <span class="stage-dot y"></span>
+            <span class="stage-dot g"></span>
+            <span style="margin-left:6px">four-powers — session</span>
+          </div>
+          <div class="stage-body" id="stageBody">
+            <div class="stage-line" data-i="0"><span class="g">→</span> boot generalist stack</div>
+            <div class="stage-line" data-i="1"><span class="w">Build</span>     · Replit / Bolt / Cursor online</div>
+            <div class="stage-line" data-i="2"><span class="w">Automate</span>  · Zapier + Make pipelines armed</div>
+            <div class="stage-line" data-i="3"><span class="w">Create</span>    · prompt systems + visual tools ready</div>
+            <div class="stage-line" data-i="4"><span class="w">Connect</span>   · messaging + application layer live</div>
+            <div class="stage-line" data-i="5"><span class="g">✓</span> one-person army status: <span class="w">active</span></div>
+          </div>
+        </div>
+        <div class="stage-base">AI GENERALIST · LIVE STACK</div>
+      </div>
+      <p class="stage-hint js-only">Press <kbd>Space</kbd> or click the stage to replay the boot sequence.</p>
+
+      <div class="console-wrap js-only">
+        <div class="console-bar">
+          <span class="console-dot r"></span>
+          <span class="console-dot y"></span>
+          <span class="console-dot g"></span>
+          <span style="margin-left:8px">ai-generalist — zsh</span>
+        </div>
+        <div class="console-body">
+          <div style="margin-bottom:6px"><span class="console-prompt">→</span> whoami</div>
+          <div style="color:var(--muted);margin-bottom:10px">Akadonye Chibuike Macdonald · AI Generalist</div>
+          <div><span class="console-prompt">→</span> <input class="console-input" id="consoleInput" placeholder="type a command…" autocomplete="off" spellcheck="false" /></div>
+          <div class="console-out" id="consoleOut"></div>
+          <div class="console-hint">help · powers · stack · owerri · ship · attack · clear</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="work">
+    <div class="wrap">
+      <p class="sec-label">08 · Work</p>
+      <h2 class="sec-title">What I’ve <em>shipped</em></h2>
+      <p class="sec-lead">Systems and output that turn AI from experiment into daily leverage.</p>
+
+      <div class="work-grid">
+        <article class="work-card">
+          <p class="work-num">01 · AI Generalist System</p>
+          <div class="metric">~$50k <span>independent output</span></div>
+          <h3>Four Powers stack</h3>
+          <p>Personal operating system around Build · Automate · Create · Connect. Moved from scattered digital skills to consistent one-person shipping.</p>
+          <div class="tags">
+            <span class="tag">Replit / Bolt</span>
+            <span class="tag">Zapier / Make</span>
+            <span class="tag">Claude / GPT</span>
+            <span class="tag">Midjourney</span>
+          </div>
+          <p class="work-stat"><strong>Result:</strong> Roughly $50k generated over two years without a traditional team</p>
+        </article>
+
+        <article class="work-card">
+          <p class="work-num">02 · Commercial AI Video</p>
+          <div class="metric">15s <span>premium ad systems</span></div>
+          <h3>Prompt systems for paid ads</h3>
+          <p>Structured prompting for short-form commercial AI video (Higgsfield, Seedance, Kling and similar). Product lock, motivated light, clear CTA.</p>
+          <div class="tags">
+            <span class="tag">Prompt engineering</span>
+            <span class="tag">Commercial grammar</span>
+            <span class="tag">Quality gates</span>
+          </div>
+          <p class="work-stat"><strong>Focus:</strong> Nigerian & African business use-cases that actually convert</p>
+        </article>
+
+        <article class="work-card">
+          <p class="work-num">03 · Local Opportunity Systems</p>
+          <div class="metric">Owerri <span>first filter</span></div>
+          <h3>Opportunity Radar</h3>
+          <p>Pipelines that scan public sources for grants, training, scholarships, tenders and youth programmes, then keep only what applies to people in Owerri and Imo.</p>
+          <div class="tags">
+            <span class="tag">Research automation</span>
+            <span class="tag">Local relevance</span>
+            <span class="tag">Structured output</span>
+          </div>
+          <p class="work-stat"><strong>Goal:</strong> Cut the noise so real opportunities become actionable</p>
+        </article>
+
+        <article class="work-card">
+          <p class="work-num">04 · Brand & Print Support</p>
+          <div class="metric">Physical <span>+ digital</span></div>
+          <h3>Sleekblue Media Houz</h3>
+          <p>Close work with a premium printing and corporate branding house in Owerri — turning design and production capability into clearer digital presence and systems.</p>
+          <div class="tags">
+            <span class="tag">Branding</span>
+            <span class="tag">Print operations</span>
+            <span class="tag">Digital infrastructure</span>
+          </div>
+          <p class="work-stat"><strong>Context:</strong> Real physical business serving local and national clients</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <p class="sec-label">10 · Skills</p>
+      <h2 class="sec-title">What’s in the <em>toolbox</em></h2>
+      <p class="sec-lead">Only tools that actually ship.</p>
+
+      <div class="skills-grid">
+        <div class="skill-bucket">
+          <h4>Build</h4>
+          <ul>
+            <li>No-code / low-code (Replit, Bolt, Cursor)</li>
+            <li>AI agents & simple apps</li>
+            <li>Rapid prototypes</li>
+            <li>Internal tools</li>
+          </ul>
+        </div>
+        <div class="skill-bucket">
+          <h4>Automate</h4>
+          <ul>
+            <li>Zapier / Make.com</li>
+            <li>Workflow design</li>
+            <li>Research pipelines</li>
+            <li>Repetitive task removal</li>
+          </ul>
+        </div>
+        <div class="skill-bucket">
+          <h4>Create</h4>
+          <ul>
+            <li>Commercial AI video prompts</li>
+            <li>Image generation</li>
+            <li>Writing & positioning</li>
+            <li>Short-form content systems</li>
+          </ul>
+        </div>
+        <div class="skill-bucket">
+          <h4>Connect</h4>
+          <ul>
+            <li>Clear messaging</li>
+            <li>Audience growth fundamentals</li>
+            <li>Proposal & application writing</li>
+            <li>Local + digital networks</li>
+          </ul>
+        </div>
+        <div class="skill-bucket">
+          <h4>Research</h4>
+          <ul>
+            <li>Deep multi-source research</li>
+            <li>Opportunity scanning</li>
+            <li>Evidence discipline</li>
+            <li>Market & pattern spotting</li>
+          </ul>
+        </div>
+        <div class="skill-bucket">
+          <h4>Context</h4>
+          <ul>
+            <li>Nigerian SME realities</li>
+            <li>Owerri / Imo landscape</li>
+            <li>Print & physical branding</li>
+            <li>Practical AI adoption</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="journey">
+    <div class="wrap">
+      <p class="sec-label">11 · Journey</p>
+      <h2 class="sec-title">How I got <em>here</em></h2>
+      <p class="sec-lead">Not a straight corporate ladder. Decisions that moved closer to leverage.</p>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <p class="tl-year">Earlier</p>
+          <h3>Digital dabbling</h3>
+          <p>Marketing pieces, coding experiments, design tools — useful but scattered.</p>
+        </div>
+        <div class="tl-item">
+          <p class="tl-year">~2023–2024</p>
+          <h3>All-in on AI</h3>
+          <p>Stopped treating AI as a side tool. Started treating it as the main multiplier and built the Four Powers approach.</p>
+        </div>
+        <div class="tl-item">
+          <p class="tl-year">2024–2025</p>
+          <h3>One-person army results</h3>
+          <p>Consistent independent output. Roughly $50k generated by applying the generalist stack.</p>
+        </div>
+        <div class="tl-item">
+          <p class="tl-year">Now</p>
+          <h3>Systems + local impact</h3>
+          <p>Commercial AI video systems, Opportunity Radar for Owerri/Imo, and tighter work with real local businesses.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="play">
+    <div class="wrap">
+      <p class="sec-label">12 · Play</p>
+      <h2 class="sec-title">Want to <em>break something?</em></h2>
+      <p class="sec-lead">Three interactions that run in your browser. Nothing you type is sent anywhere.</p>
+
+      <div class="play-grid">
+        <div class="play-card" data-game="prompt">
+          <h3>Prompt Attack</h3>
+          <p>A weak commercial prompt is about to ship. Catch the gaps before it wastes a generation.</p>
+          <span class="open">Play ›</span>
+        </div>
+        <div class="play-card" data-game="powers">
+          <h3>Four Powers Check</h3>
+          <p>Quick self-assessment. See which of the Four Powers you’re strongest in right now.</p>
+          <span class="open">Play ›</span>
+        </div>
+        <div class="play-card" data-game="radar">
+          <h3>Opportunity Filter</h3>
+          <p>Raw opportunity list vs Owerri-first filter. Feel the difference local relevance makes.</p>
+          <span class="open">Play ›</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="now">
+    <div class="wrap">
+      <p class="sec-label">09 · Now building</p>
+      <h2 class="sec-title">What I’m focused on <em>right now</em></h2>
+
+      <div class="now-box">
+        <h3>Making AI usable for people who need results, not demos.</h3>
+        <p>Better commercial video systems, clearer opportunity pipelines for Owerri and Imo, and practical AI generalist playbooks that work outside Silicon Valley conditions.</p>
+        <p>If you’re building something real and want AI to do heavy lifting instead of adding noise, we should talk.</p>
+        <a href="#contact" class="btn btn-primary">Start a conversation</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <p class="sec-label">13 · Contact</p>
+      <h2 class="sec-title">Let’s work <em>together</em></h2>
+      <p class="sec-lead">AI systems, commercial video prompts, opportunity research, or sharper digital presence for a real Nigerian business.</p>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>Reach out</h3>
+          <p>Email or direct message. I read everything that looks real.</p>
+          <div class="contact-links">
+            <a href="https://www.facebook.com/akadonyem" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://medium.com/@droagrict" target="_blank" rel="noopener">Medium</a>
+          </div>
+        </div>
+        <div class="contact-card">
+          <h3>Good fits</h3>
+          <p style="margin:0;color:var(--muted);font-size:.92rem;line-height:1.7">
+            • Short commercial AI video systems<br>
+            • Prompt & quality systems for paid ads<br>
+            • Opportunity research / application support<br>
+            • AI generalist training or internal tooling<br>
+            • Brand + digital support for real Nigerian businesses
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Akadonye Chibuike Macdonald</span>
+      <span>Progressive enhancement · Interactions run locally</span>
+    </div>
+  </footer>
+
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    const lines = document.querySelectorAll('.stage-line');
+    function playStage() {
+      lines.forEach(l => l.classList.remove('show'));
+      lines.forEach((l, i) => {
+        setTimeout(() => l.classList.add('show'), 280 + i * 420);
+      });
+    }
+    playStage();
+    const stage = document.getElementById('stage');
+    if (stage) {
+      stage.addEventListener('click', playStage);
+      document.addEventListener('keydown', e => {
+        if (e.code === 'Space' && !e.target.matches('input, textarea')) {
+          e.preventDefault();
+          playStage();
+        }
+      });
+    }
+
+    const input = document.getElementById('consoleInput');
+    const out = document.getElementById('consoleOut');
+    const commands = {
+      help: 'Available:\n  whoami  powers  stack  owerri  ship  attack  clear',
+      whoami: 'Akadonye Chibuike Macdonald\nAI Generalist · One-person army\nOwerri, Nigeria\nTurning AI into practical leverage.',
+      powers: 'THE FOUR POWERS\n1. Build     — apps, tools, prototypes with AI\n2. Automate  — remove repetitive work\n3. Create    — video, image, writing systems\n4. Connect   — messaging, audience, applications\n\nBe dangerous enough at each that you stop needing a full team.',
+      stack: 'High-leverage stack:\n• Claude / GPT / Cursor\n• Replit / Bolt\n• Zapier / Make\n• Midjourney + commercial prompt systems\n• Local research pipelines (Owerri first)',
+      owerri: 'Local focus is a filter, not a limit.\nOpportunity Radar keeps grants, training,\nscholarships and tenders that actually apply\nto people in Owerri and Imo State.\nEverything else is noise.',
+      ship: 'Shipped:\n• Four Powers system (~$50k independent)\n• Commercial AI video prompt systems\n• Owerri Opportunity Radar pipelines\n• Brand/digital support with Sleekblue Media Houz',
+      attack: 'PROMPT ATTACK MODE\nA weak prompt is about to waste a generation.\nOpen the Play section → Prompt Attack\nto intercept it before it ships.',
+      clear: null
+    };
+    if (input) {
+      input.addEventListener('keydown', e => {
+        if (e.key !== 'Enter') return;
+        const cmd = input.value.trim().toLowerCase();
+        input.value = '';
+        if (cmd === 'clear') { out.textContent = ''; return; }
+        const result = (commands[cmd] || 'not found: ' + cmd + '  (try help)').replace(/\\n/g, '\n');
+        out.textContent = (out.textContent ? out.textContent + '\n\n' : '') + '→ ' + cmd + '\n' + result;
+        out.scrollTop = out.scrollHeight;
+      });
+    }
+
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modalContent');
+    const modalClose = document.getElementById('modalClose');
+    function openModal(html) {
+      modalContent.innerHTML = html;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    document.querySelectorAll('.play-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const g = card.dataset.game;
+        if (g === 'prompt') openPromptAttack();
+        if (g === 'powers') openPowersCheck();
+        if (g === 'radar') openRadar();
+      });
+    });
+
+    function openPromptAttack() {
+      openModal(
+        '<h3>Prompt Attack</h3>' +
+        '<p>This prompt is about to ship. Find the gaps before it wastes a generation run.</p>' +
+        '<div style="background:#0a0e12;border:1px solid var(--border);border-radius:10px;padding:14px;font-family:var(--mono);font-size:12.5px;line-height:1.55;margin-bottom:14px;color:var(--fg)">' +
+        '"Make a nice video of our product looking premium with good lighting and music so people want to buy it"' +
+        '</div>' +
+        '<p style="font-size:13px;margin-bottom:10px">Select every problem you can see:</p>' +
+        '<label style="display:block;margin:7px 0;cursor:pointer;font-size:13.5px"><input type="checkbox" value="hook"> No specific hook or problem in the first seconds</label>' +
+        '<label style="display:block;margin:7px 0;cursor:pointer;font-size:13.5px"><input type="checkbox" value="lock"> No product lock / hero shot instruction</label>' +
+        '<label style="display:block;margin:7px 0;cursor:pointer;font-size:13.5px"><input type="checkbox" value="light"> Lighting is vague ("good") instead of motivated</label>' +
+        '<label style="display:block;margin:7px 0;cursor:pointer;font-size:13.5px"><input type="checkbox" value="cta"> No clear CTA or end card</label>' +
+        '<label style="display:block;margin:7px 0;cursor:pointer;font-size:13.5px"><input type="checkbox" value="time"> No timed beats (0-3s, 3-7s…)</label>' +
+        '<label style="display:block;margin:7px 0;cursor:pointer;font-size:13.5px"><input type="checkbox" value="neg"> No negative constraints (distortion, morphing, etc.)</label>' +
+        '<button class="btn btn-primary" id="scoreAttack" style="margin-top:16px">Score the attack</button>' +
+        '<div id="attackResult" style="margin-top:14px"></div>'
+      );
+      document.getElementById('scoreAttack').addEventListener('click', () => {
+        const checked = [...document.querySelectorAll('#modalContent input[type=checkbox]:checked')].map(c => c.value);
+        const total = 6;
+        const score = checked.length;
+        const pct = Math.round((score / total) * 100);
+        document.getElementById('attackResult').innerHTML =
+          '<div class="score-bar"><div class="score-fill" style="width:' + pct + '%"></div></div>' +
+          '<p style="font-size:13px;color:var(--muted)">You caught <strong style="color:var(--fg)">' + score + '/' + total + '</strong> critical gaps.</p>' +
+          '<p style="font-size:13px;margin-top:8px;color:var(--muted)">A production-ready commercial prompt needs timed structure, product lock, motivated light, clear CTA, and negative constraints. Vague "make it premium" language is how generations get wasted.</p>';
+      });
+    }
+
+    function openPowersCheck() {
+      openModal(
+        '<h3>Four Powers Check</h3>' +
+        '<p>Answer honestly. Takes 20 seconds.</p>' +
+        '<div id="powersQ" style="font-size:.94rem">' +
+        '<p style="margin-bottom:10px"><strong>1.</strong> When you need something built:</p>' +
+        '<label style="display:block;margin:5px 0;cursor:pointer"><input type="radio" name="q1" value="build"> You open a tool and ship a working version the same day</label>' +
+        '<label style="display:block;margin:5px 0;cursor:pointer"><input type="radio" name="q1" value="other"> You wait for someone else or leave it in notes</label>' +
+        '<p style="margin:14px 0 10px"><strong>2.</strong> Repetitive work this week:</p>' +
+        '<label style="display:block;margin:5px 0;cursor:pointer"><input type="radio" name="q2" value="auto"> The worst parts are already automated</label>' +
+        '<label style="display:block;margin:5px 0;cursor:pointer"><input type="radio" name="q2" value="other"> Most of it is still manual</label>' +
+        '<p style="margin:14px 0 10px"><strong>3.</strong> Creating content or assets:</p>' +
+        '<label style="display:block;margin:5px 0;cursor:pointer"><input type="radio" name="q3" value="create"> You ship usable drafts with AI in under an hour</label>' +
+        '<label style="display:block;margin:5px 0;cursor:pointer"><input type="radio" name="q3" value="other"> It still feels slow or inconsistent</label>' +
+        '<p style="margin:14px 0 10px"><strong>4.</strong> Getting opportunities or attention:</p>' +
+        '<label style="display:block;margin:5px 0;cursor:pointer"><input type="radio" name="q4" value="connect"> You can turn a clear message into replies or applications</label>' +
+        '<label style="display:block;margin:5px 0;cursor:pointer"><input type="radio" name="q4" value="other"> Visibility still feels random</label>' +
+        '<button class="btn btn-primary" id="runPowers" style="margin-top:18px">See result</button>' +
+        '</div><div id="powersResult" style="display:none"></div>'
+      );
+      document.getElementById('runPowers').addEventListener('click', () => {
+        const vals = ['q1','q2','q3','q4'].map(n => {
+          const el = document.querySelector('input[name="'+n+'"]:checked');
+          return el ? el.value : null;
+        });
+        if (vals.some(v => !v)) { alert('Answer all four.'); return; }
+        const map = { build:'Build', auto:'Automate', create:'Create', connect:'Connect' };
+        const strong = vals.filter(v => v !== 'other').map(v => map[v]);
+        const weak = ['Build','Automate','Create','Connect'].filter(p => !strong.includes(p));
+        document.getElementById('powersQ').style.display = 'none';
+        const res = document.getElementById('powersResult');
+        res.style.display = 'block';
+        res.innerHTML =
+          '<p style="margin-bottom:8px"><strong>Strong now:</strong> ' + (strong.length ? strong.join(', ') : 'None clearly yet') + '</p>' +
+          '<p style="margin-bottom:8px"><strong>Develop next:</strong> ' + (weak.length ? weak.join(', ') : 'Balanced') + '</p>' +
+          '<p style="color:var(--muted);font-size:.9rem">Goal is not perfection. Goal is being dangerous enough at each power that you stop needing a full team for most work.</p>';
+      });
+    }
+
+    function openRadar() {
+      openModal(
+        '<h3>Opportunity Filter</h3>' +
+        '<p>Raw list vs Owerri-first filter. Feel the difference.</p>' +
+        '<div style="font-family:var(--mono);font-size:12px;line-height:1.65;background:#0a0e12;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px">' +
+        '<div style="color:var(--muted);margin-bottom:6px">RAW (unfiltered)</div>' +
+        '<div>• National youth grant (any state)</div>' +
+        '<div>• Lagos-only tech fellowship</div>' +
+        '<div>• UK remote internship (visa required)</div>' +
+        '<div>• Imo skills training window</div>' +
+        '<div>• Abuja policy workshop</div>' +
+        '<div>• South-East enterprise support</div>' +
+        '<div>• Global AI contest (no local track)</div>' +
+        '</div>' +
+        '<div style="font-family:var(--mono);font-size:12px;line-height:1.65;background:#0a0e12;border:1px solid rgba(45,212,191,.25);border-radius:10px;padding:14px">' +
+        '<div style="color:var(--glow);margin-bottom:6px">OWERRI / IMO FIRST</div>' +
+        '<div style="color:var(--fg)">→ Imo skills training window — open</div>' +
+        '<div style="color:var(--fg)">→ South-East enterprise support — check deadline</div>' +
+        '<div style="color:var(--muted)">· National youth grant (possible, lower priority)</div>' +
+        '<div style="color:var(--muted);margin-top:8px;font-size:11px">Everything else filtered out as low local relevance.</div>' +
+        '</div>' +
+        '<p style="font-size:12.5px;color:var(--muted);margin-top:12px">Real radar outputs a structured table ready for a sheet or action list. This is only the filter logic.</p>'
+      );
+    }
+  </script>
+</body>
+</html>
